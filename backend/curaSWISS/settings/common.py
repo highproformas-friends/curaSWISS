@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'apps.iamstudent',
     'apps.ineedstudent',
     'apps.accounts',
+    'apps.ioffer',
+    'apps.ineed'
 ]
 
 MIDDLEWARE = [
