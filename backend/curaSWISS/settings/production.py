@@ -11,8 +11,9 @@ DEBUG = False
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
+
 ALLOWED_HOSTS = ['matchmedisvsvirus.dynalias.org', 'helping-health.from-de.com', 'curaSWISS.de',
-                 'curaSWISS.eu', 'curaSWISS.org', 'medis-vs-covid19.de']
+                 'curaSWISS.eu', 'curaSWISS.org', 'medis-vs-covid19.de', 'localhost']
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -62,11 +63,11 @@ LOGGING = {
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
 # Normal SMTP
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST_USER = 'apikey'
+# EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
 # Using the API
-# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
