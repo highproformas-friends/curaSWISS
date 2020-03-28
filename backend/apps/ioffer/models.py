@@ -1,12 +1,9 @@
 from django.conf import settings
 from django.db import models
 from apps.accounts.models import User
+from apps.role.models import Role
 
 # Create your models here.
-
-class Role(models.Model):
-
-    name = models.CharField(max_length=50)
 
 
 class IOffer(models.Model):
@@ -23,4 +20,3 @@ class IOffer(models.Model):
 
     class Meta:
         ordering = ['plz']
-
