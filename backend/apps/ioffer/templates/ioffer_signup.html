@@ -39,5 +39,10 @@ Registrierung - Studierende
         Gesundheitsämtern in Verbindung zu bringen, sollten diese nach Unterstützung suchen. Hierfür bitten wir dich,
         die folgenden Daten anzugeben, damit wir dich mit den entsprechenden Gesuchen verbinden können.{% endblocktrans %} </p>
 
+    <form action="sign_up" method="post">
+                {% csrf_token %}
+                {{form_mail}}
+                {% crispy form form.helper %}
+     </form>
 </div>
 {% endblock %}

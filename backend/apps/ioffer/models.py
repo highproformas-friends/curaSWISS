@@ -1,8 +1,48 @@
-from django.conf import settings
+import uuid as uuid
+from datetime import datetime
+
 from django.db import models
+from django.core.exceptions import ValidationError
+
 from apps.accounts.models import User
 
 # Create your models here.
+LESSTEN = 1
+LESSTWENTY = 2
+LESSFOURTY = 3
+MOREFOURTY = 4
+
+UMKREIS_CHOICES = (
+    (LESSTEN, '<10 km'),
+    (LESSTWENTY, '<20 km'),
+    (LESSFOURTY, '<40 km'),
+    (MOREFOURTY, '>40 km'),
+)
+
+BEZAHLUNG = 1
+UNENTGELTLICH = 2
+BEZAHLUNG_CHOICES = (
+    (UNENTGELTLICH, ('Ich freue mich über eine Vergütung, helfe aber auch ohne')),
+    (BEZAHLUNG, ('Ich benötige eine Vergütung')),
+)
+
+TEN = 1
+TWENTY = 2
+THIRTY = 3
+FOURTY = 4
+VERFUEGBARKEIT_CHOICES = (
+    (TEN, ('10h pro Woche')),
+    (TWENTY, ('20h pro Woche')),
+    (THIRTY, ('30h pro Woche')),
+    (FOURTY, ('40h pro Woche')),
+)
+
+def validate_checkbox(value):
+    if value != True:
+        raise ValidationError(_("Zustimmung erforderlich."), code='invalid')
+    else:
+        return value
+
 
 class Role(models.Model):
 
@@ -10,6 +50,17 @@ class Role(models.Model):
 
 
 class IOffer(models.Model):
+    COUNTRY_CODE_CHOICES = [
+        ("CH", 'Schweiz'),
+        ("DE", 'Deutschland'),
+        ("AT", 'Österreich'),
+    ]
+
+    countrycode = models.CharField(
+        max_length=2,
+        choices=COUNTRY_CODE_CHOICES,
+        default="CH",
+    )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
@@ -20,7 +71,30 @@ class IOffer(models.Model):
 
     plz = models.CharField(max_length=5, null=True)
 
+    uuid = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
+    registration_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
 
+    phone_number = models.CharField(max_length=100, blank=True, default='')
+
+    umkreis = models.IntegerField(choices=UMKREIS_CHOICES, null=True, blank=False)
+    availability_start = models.DateField(null=True,default=datetime.now)
+
+    braucht_bezahlung = models.IntegerField(choices=BEZAHLUNG_CHOICES,
+                                            default=UNENTGELTLICH)
+
+    zeitliche_verfuegbarkeit = models.IntegerField(choices=VERFUEGBARKEIT_CHOICES, null=True, blank=False)
+
+    datenschutz_zugestimmt = models.BooleanField(default=False, validators=[validate_checkbox])
+    einwilligung_datenweitergabe = models.BooleanField(default=False, validators=[validate_checkbox])
+
+    sonstige_qualifikationen = models.CharField(max_length=200, blank=True, default='keine')
+    unterkunft_gewuenscht = models.BooleanField(default=False)
+
+    # Metadata
     class Meta:
         ordering = ['plz']
 
+    # Methods
+    def __str__(self):
+        """String for representing the MyModelName object (in Admin site etc.)."""
+        return self.user.email
