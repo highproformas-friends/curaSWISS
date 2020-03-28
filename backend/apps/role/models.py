@@ -14,11 +14,11 @@ class Role(models.Model):
     functions = models.ManyToManyField(Function, related_name='functions')
 
     NAME_CHOICES = [
-        ("MEDICAL", 'Medicine Role'),
-        ("NEXT", 'Next Role'),
+        ("MEDICAL", 'Medicine'),
+        ("SHOPPING", 'Shopping'),
     ]
 
-    name = models.CharField(max_length=50, choices=NAME_CHOICES, default='MEDICAL')
+    name = models.CharField(max_length=50, choices=NAME_CHOICES, default='MEDICAL', unique=True)
 
     class Meta:
         ordering = ['name']
