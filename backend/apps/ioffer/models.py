@@ -13,6 +13,8 @@ class IOffer(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
+
     name_first = models.CharField(max_length=50, default='')
     name_last = models.CharField(max_length=50, default='')
 

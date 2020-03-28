@@ -11,6 +11,7 @@ class Role(models.Model):
 class INeed(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
 
     organization_name = models.CharField(max_length=50, default='')
 
