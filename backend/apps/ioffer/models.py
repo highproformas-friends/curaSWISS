@@ -3,6 +3,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+class Role(models.Model):
+
+    name = models.CharField(max_length=50, default='')
+
+
 class IOffer(models.Model):
 
     user = models.ForeignKey(
@@ -10,10 +15,14 @@ class IOffer(models.Model):
         on_delete=models.CASCADE,
     )
 
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+
     name_first = models.CharField(max_length=50, default='')
     name_last = models.CharField(max_length=50, default='')
 
     plz = models.CharField(max_length=5, null=True)
 
+
     class Meta:
         ordering = ['plz']
+
