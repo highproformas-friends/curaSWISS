@@ -6,19 +6,12 @@ from apps.accounts.models import User
 
 class Role(models.Model):
 
-    ROLES = [
-        "ROLE1",
-        "ROLE2"
-    ]
-
-    name = models.CharField(max_length=50, default=ROLES)
+    name = models.CharField(max_length=50)
 
 
 class IOffer(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, default=Role.ROLES[0])
 
     name_first = models.CharField(max_length=50, default='')
     name_last = models.CharField(max_length=50, default='')
