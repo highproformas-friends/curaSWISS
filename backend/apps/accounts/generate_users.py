@@ -88,6 +88,7 @@ def populate_db(request):
                                    availability_start='{}-{:02d}-{:02d}'.format(year,months[i],days[i]),
                                    **kwd
                                    )
+                                                                      
     plzs = np.random.choice(big_city_plzs, size=n_student)
     for i in range(n_hospital):
         m = mail(i+n_student)

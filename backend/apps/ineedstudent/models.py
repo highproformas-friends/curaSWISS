@@ -27,7 +27,7 @@ class Hospital(models.Model):
     )
 
     ## Kontaktdaten
-    #email = models.EmailField(unique=True)
+    # email = models.EmailField(unique=True,default='')
     sonstige_infos = models.TextField(default='')
     ansprechpartner = models.CharField(max_length=100,default='')
     telefon = models.CharField(max_length=100,default='')
