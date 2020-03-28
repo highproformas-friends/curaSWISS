@@ -28,6 +28,7 @@ urlpatterns = [
     path('ineedstudent/', include('apps.ineedstudent.urls')),
     path('accounts/', include('apps.accounts.urls')),
     path('ioffer/', include('apps.ioffer.urls')),
+    path('ineed/', include('apps.ineed.urls')),
     path('admin/', admin.site.urls),
     path('', views.home),
     path('about/', views.about),

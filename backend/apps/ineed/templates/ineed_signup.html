@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+Registrierung - Studierende
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div style="height:40px"></div>
+    {% if user.is_authenticated %}
+
+    {% blocktrans %} Sie sind bereits angemeldet. Hier geht es zum {% endblocktrans %} <a href="logout">Logout</a>.
+    <hr>
+    <br>
+
+    {% else %}
+    {% blocktrans %} Schon registriert? Hier geht es zum {% endblocktrans %}
+
+
+    <a href="/accounts/login_redirect">Login</a>.
+    <hr>
+    <br>
+    {% endif %}
+
+
+    <h1 class="font-weight-light match4hc-title"> {% blocktrans %}Sie brauchen in Ihrer Institution aktuell Hilfe?{% endblocktrans %} </h1>
+    <h2 class="font-weight-light match4hc-title">{% blocktrans %}Wir verbinden Helfende und Hilfesuchende zu einem curaSWISS!{% endblocktrans %}</h2>
+    <p>{% blocktrans %}Bitte geben Sie hier die allgemeinen Angaben zu Ihrer Institution an. Nach Klick auf "Registrieren" erhalten Sie eine E-Mail mit einem Bestätigungslink. Nach Klick darauf gelangen Sie in die Datenbank. Dort können nach den von Ihnen gewünschten Kriterien (Ausbildungsstand etc.) Helfende suchen, filtern und diesen auf unserer Plattform direkt eine E-Mail verfassen. Der Emailversand erfolgt dann nach einer Validierung durch uns.{% endblocktrans %} </p>
+
+</div>
+{% endblock %}
