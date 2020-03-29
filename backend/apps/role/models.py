@@ -7,7 +7,7 @@ from django.db import models
 class Function(models.Model):
 
     name = models.CharField(max_length=50, unique=True)
-    short_text = models.CharField(max_length=20, default='')
+    short_text = models.CharField(max_length=50, default='')
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""

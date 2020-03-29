@@ -5,9 +5,8 @@ from apps.role.models import Function
 class Skill(models.Model):
 
     certificate_needed = models.BooleanField(default=False)
-    short_text = models.CharField(max_length=20, null=True)
+    short_text = models.CharField(max_length=50, null=True)
     description = models.TextField(default='')
-    bla = models.BooleanField(default=False)
     # parent_skill = models.ForeignKey(Skill, on_delete=models.CASCADE, null=True)
     valid_function = models.ManyToManyField(
         Function,
