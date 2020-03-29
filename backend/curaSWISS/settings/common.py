@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'apps.ineed',
     'apps.role',
     'apps.map',
+    'apps.skill',
     'apps.location'
 ]
 
