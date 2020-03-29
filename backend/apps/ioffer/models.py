@@ -80,10 +80,6 @@ class IOffer(models.Model):
     sonstige_qualifikationen = models.CharField(max_length=200, blank=True, default='keine')
     unterkunft_gewuenscht = models.BooleanField(default=False)
 
-    # Metadata
-    class Meta:
-        ordering = ['plz']
-
     # Methods
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
