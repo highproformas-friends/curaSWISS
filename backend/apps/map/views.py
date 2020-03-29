@@ -17,7 +17,7 @@ def fetch_functions():
     offered_functions = dict()
     functions = list()
     for ioffer in ioffers:
-        plz = ioffer.plz
+        plz = ioffer.location.plz
         funcs = [f.name for f in ioffer.offer_functions.all()]
         functions.extend(funcs)
         func_counts = dict()
