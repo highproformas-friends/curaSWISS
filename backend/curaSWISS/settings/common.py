@@ -30,13 +30,14 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'crispy_forms',
     'django_tables2',
-    'apps.mapview',
+    #'apps.mapview', # has been replaced with apps.map
     'apps.iamstudent',
     'apps.ineedstudent',
     'apps.accounts',
     'apps.ioffer',
     'apps.ineed',
     'apps.role',
+    'apps.map',
     'apps.skill',
     'apps.location'
 ]

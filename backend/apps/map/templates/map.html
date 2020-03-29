@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dict_key %}
+{% load i18n %}
+{% load l10n %}
+
+{% block title %}
+{% blocktrans %}Karte der Hilfsbereiten{% endblocktrans %}
+{% endblock %}
+
+{% block header %}
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+       integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+       crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+       integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+       crossorigin=""></script>
+    <style type="text/css">
+        #mapid {
+            height: 1000px;
+        }
+        #filterbar {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="filterbar">
+        <form id="filter">
+            <fieldset>
+                {% for fun in functions %}
+                    <input type="checkbox" class="filtercheckboxes" name="filter_{{ fun }}" value="{{ fun }}" onclick="return refilter_functions();" checked>{{ fun }}
+                {% endfor %}
+            </fieldset>
+        </form>
+    </div>
+    <div id="mapid"></div>
+    <script type="text/javascript">
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function refilter_functions() {
+            update_markers(markers)
+        }
+
+        function get_ticked_checkboxes() {
+            var checked = [];
+            $.each($("input[class='filtercheckboxes']:checked"), function(){
+                checked.push($(this).val());
+            });
+            return checked
+        }
+
+        function update_markers(markers){
+            popup_messages = {}
+            $.each(markers, function(plz, marker){
+                popup_messages[plz] = 'At '+plz+' there are the following helpers registered meeting your search criteria:<br />'
+            });
+            var checked = get_ticked_checkboxes();
+            var offerings = {};
+
+            {% for plz in offers %}
+                var offer = JSON.parse('{{ offers|dict_key:plz }}'.replace(/&#x27;/g, '"'));
+                $.each(offer, function( offering, counts ) {
+                    if(checked.includes(offering)) {
+                        if(offering in offerings) { // check if key is in
+                            offerings[offering]['{{plz}}'] = offerings[offering]['{{plz}}'] + counts || counts;
+                        }else{
+                            offerings[offering] = {"{{plz}}": counts}
+                        }
+                    }
+                });
+            {% endfor %}
+            // now fill marker popups
+            updated = []
+            $.each(offerings, function(offering, places){
+                $.each(places, function(plz, count){
+                    updated.push(plz);
+                    popup_messages[plz] += count+' ' +offering+ '<br />';
+                });
+            });
+            // apply to markers or remove if marker is no longer needed
+            $.each(markers, function(plz, marker){
+                if(updated.includes(plz)){
+                    marker.bindPopup(popup_messages[plz]).addTo(map);
+                }else{
+                    marker.remove(map);
+                }
+            });
+        }
+
+        var markers = {};
+        {% for plz in coordinates %}
+            var coords = JSON.parse('{{ coordinates|dict_key:plz }}'.replace(/&#x27;/g, '"'));
+
+            var col = getRandomColor();
+            markers['{{ plz }}'] = L.circle([coords.lat, coords.lng],{
+                title: coords.locality,
+                color: col,
+                weight: 3,
+                fillColor: col,
+                fillOpacity: .2,
+                radius: 1000
+            });
+        {% endfor %}
+
+        // setup the map
+        var mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={{ mapbox_access_token }}';
+        var mapboxAttribution = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
+        var streets   = L.tileLayer(mapboxUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mapboxAttribution});
+
+        var map = L.map('mapid', {
+            center: [46.80066, 8.22267],
+            zoom: 9,
+            layers: [streets] // default layers
+        });
+
+        // plot the markers
+        update_markers(markers);
+
+        // make sure map occupies whole page
+        window.addEventListener('load', function() {
+            $(window).on("resize", function () {
+                var height = $(window).height();
+                var navHeight = $('.navbar').outerHeight();
+
+                var footerHeight = $('.footer').innerHeight();
+                var newHeight = height - navHeight - footerHeight;
+                $("#mapid").height(newHeight);
+                map.invalidateSize();
+            }).trigger("resize");});
+
+    </script>
+{% endblock %}
