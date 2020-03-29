@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ioffer', '0003_merge_20200329_1419'),
+        ('ioffer', '0002_auto_20200329_1457'),
     ]
 
     operations = [
