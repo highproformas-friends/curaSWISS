@@ -1,5 +1,6 @@
 import uuid as uuid
-from datetime import datetime
+from django.utils import timezone
+
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -44,12 +45,6 @@ def validate_checkbox(value):
     else:
         return value
 
-
-class Role(models.Model):
-
-    name = models.CharField(max_length=50)
-
-
 class IOffer(models.Model):
     COUNTRY_CODE_CHOICES = [
         ("CH", 'Schweiz'),
@@ -75,12 +70,12 @@ class IOffer(models.Model):
     plz = models.CharField(max_length=5, null=True)
 
     uuid = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
-    registration_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
+    registration_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
 
     phone_number = models.CharField(max_length=100, blank=True, default='')
 
     umkreis = models.IntegerField(choices=UMKREIS_CHOICES, null=True, blank=False)
-    availability_start = models.DateField(null=True,default=datetime.now)
+    availability_start = models.DateField(null=True,default=timezone.now)
 
     braucht_bezahlung = models.IntegerField(choices=BEZAHLUNG_CHOICES,
                                             default=UNENTGELTLICH)
