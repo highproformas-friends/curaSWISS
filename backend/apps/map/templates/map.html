@@ -28,7 +28,10 @@ var map = new mapboxgl.Map({
        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
        crossorigin=""></script>
     <style type="text/css">
-        #mapid {height: 600px}
+        #mapid {
+            height: 1000px;
+            z-index:1;
+        }
     </style>
 {% endblock %}
 
@@ -70,20 +73,29 @@ var map = new mapboxgl.Map({
             layers: [streets, cities, cities2] // default layers
         });
 
-        var baseMaps = {
-            "Streets": streets
-        };
-
         var overlayMaps = {
             "FaBe": cities,
             "FaGe": cities2
         };
 
         L.control.layers(
-            baseMaps,
+            null, // map type shall not be switchable
             overlayMaps,
             {collapsed:false}
         ).addTo(map);
 
+        window.addEventListener('load', function() {
+            $(window).on("resize", function () {
+                var height = $(window).height();
+                var navHeight = $('.navbar').outerHeight();
+
+                var footerHeight = $('.footer').innerHeight();
+                var newHeight = height - navHeight - footerHeight;
+                $("#mapid").height(newHeight);
+                map.invalidateSize();
+            }).trigger("resize");});
+        {% for fun in functions %}
+            console.log('{{ fun }}')
+        {% endfor %}
     </script>
 {% endblock %}
