@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from apps.accounts.models import User
 from apps.role.models import Role, Function
@@ -40,25 +41,15 @@ VERFUEGBARKEIT_CHOICES = (
     (FOURTY, ('40h pro Woche')),
 )
 
+
 def validate_checkbox(value):
-    if value != True:
+    if not value:
         raise ValidationError(_("Zustimmung erforderlich."), code='invalid')
     else:
         return value
 
+
 class IOffer(models.Model):
-    COUNTRY_CODE_CHOICES = [
-        ("CH", 'Schweiz'),
-        ("DE", 'Deutschland'),
-        ("AT", 'Österreich'),
-    ]
-
-    countrycode = models.CharField(
-        max_length=2,
-        choices=COUNTRY_CODE_CHOICES,
-        default="CH",
-    )
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
@@ -69,8 +60,6 @@ class IOffer(models.Model):
 
     name_first = models.CharField(max_length=50, default='')
     name_last = models.CharField(max_length=50, default='')
-
-    plz = models.CharField(max_length=5, null=True)
 
     uuid = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
     registration_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
@@ -90,10 +79,6 @@ class IOffer(models.Model):
 
     sonstige_qualifikationen = models.CharField(max_length=200, blank=True, default='keine')
     unterkunft_gewuenscht = models.BooleanField(default=False)
-
-    # Metadata
-    class Meta:
-        ordering = ['plz']
 
     # Methods
     def __str__(self):
