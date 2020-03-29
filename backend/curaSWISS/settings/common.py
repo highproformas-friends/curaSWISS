@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'apps.ioffer',
     'apps.ineed',
     'apps.role',
+    'apps.skill',
     'apps.location'
 ]
 
