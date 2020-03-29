@@ -50,7 +50,6 @@
         }
 
         function refilter_functions() {
-            console.log('filter changed')
             update_markers(markers)
         }
 
@@ -84,7 +83,6 @@
             {% endfor %}
             // now fill marker popups
             updated = []
-            console.log(offerings)
             $.each(offerings, function(offering, places){
                 $.each(places, function(plz, count){
                     updated.push(plz);
@@ -107,20 +105,15 @@
 
             var col = getRandomColor();
             markers['{{ plz }}'] = L.circle([coords.lat, coords.lng],{
-                           color: col,
-                           weight: 3,
-                           fillColor: col,
-                           fillOpacity: .2,
-                           radius: 1000
-                       });
+                title: coords.locality,
+                color: col,
+                weight: 3,
+                fillColor: col,
+                fillOpacity: .2,
+                radius: 1000
+            });
         {% endfor %}
 
-
-/*
-            golden    = .bindPopup('This is Golden, CO.');
-        //var cities = L.layerGroup([littleton, denver]);
-        //var cities2 = L.layerGroup([aurora, golden]);
-*/
         // setup the map
         var mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={{ mapbox_access_token }}';
         var mapboxAttribution = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
@@ -132,21 +125,8 @@
             layers: [streets] // default layers
         });
 
+        // plot the markers
         update_markers(markers);
-
-
-        // generate the filter
-        var overlayMaps = {}
-        {% for fun in functions %}
-            overlayMaps['{{ fun }}'] = null;
-        {% endfor %}
-
-        // plot the map
-        L.control.layers(
-            null, // map type shall not be switchable
-            overlayMaps,
-            {collapsed:false}
-        ).addTo(map);
 
         // make sure map occupies whole page
         window.addEventListener('load', function() {

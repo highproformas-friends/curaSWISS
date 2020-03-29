@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from apps.ioffer.models import IOffer
+from apps.location.models import ZipCode
 
 def default_map(request):
     mapbox_access_token = 'pk.eyJ1IjoibnNpaWNtMCIsImEiOiJjazhjNDJkd2cwaW5iM2twaTM4ZXZrcm10In0.efXuicWK6cjTrJJjWp1jQA'
@@ -32,7 +33,9 @@ def fetch_functions():
     return list(set(functions)), offered_functions
 
 def map_postalcodes_with_coordinates(offers):
-    return dict({
-                '8050': {'lat':47.4047172, 'lng': 8.5046483},
-                '8048': {'lat':47.3953996, 'lng': 8.4618351}
-                 })
+    plzs = offers.keys()
+    zipcodes = ZipCode.objects.filter(plz__in=plzs)
+    postalcodes_map = dict()
+    for location in zipcodes: # here we will run into problems since certain places have the same zipcode.
+        postalcodes_map[location.plz] = {'lat':str(location.lat), 'lng': str(location.lng), 'locality': location.locality}
+    return postalcodes_map
