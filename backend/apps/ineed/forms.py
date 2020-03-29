@@ -13,7 +13,7 @@ class INeedForm(ModelForm):
 
     class Meta:
         model = INeed
-        exclude = ['uuid', 'registration_date', 'user', 'is_approved','role']
+        exclude = ['uuid', 'registration_date', 'user', 'is_approved']
 
         help_texts = {
             'sonstige_infos': _('Einsatzbereiche? Anforderungen? ... und nette Worte :)')
@@ -22,6 +22,8 @@ class INeedForm(ModelForm):
         labels = {
             'zip_code': _('Postleitzahl'),
             'role': _('Rolle'),
+            'needed_functions': _('benötigte Funktionen'),
+            'needed_skills': _('benötigte Fähigkeiten'),
             'countrycode': _('Land'),
             'organization_name': _('Name der Institution'),
             'phone_number': _('Telefonnummer'),
@@ -43,6 +45,7 @@ class INeedForm(ModelForm):
                 Row(Column('appears_in_map')),
                 Row(Column('phone_number'), Column('email')),
                 Row(Column('countrycode'), Column('location')),
+                Row(Column('role'), Column('needed_functions'), Column('needed_skills')),
                 Row(Column('other_information'))
         )
 
