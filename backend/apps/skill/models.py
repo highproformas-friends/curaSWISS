@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from apps.role.models import Role
+from apps.role.models import Function
 
 class Skill(models.Model):
 
@@ -9,8 +9,8 @@ class Skill(models.Model):
     description = models.TextField(default='')
     bla = models.BooleanField(default=False)
     # parent_skill = models.ForeignKey(Skill, on_delete=models.CASCADE, null=True)
-    valid_roles = models.ManyToManyField(
-        Role,
+    valid_function = models.ManyToManyField(
+        Function,
     )
 
     class Meta:

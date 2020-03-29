@@ -16,14 +16,10 @@ class Function(models.Model):
 
 class Role(models.Model):
 
-    NAME_CHOICES = [
-        ("MEDICAL", 'Medicine'),
-        ("SHOPPING", 'Shopping'),
-    ]
-    name = models.CharField(max_length=50, choices=NAME_CHOICES, default='MEDICAL')
+    name = models.CharField(max_length=50, default='', unique=True)
 
     functions = models.ManyToManyField(Function, related_name='functions')
-    short_text = models.CharField(max_length=20, default='', unique=True)
+    short_text = models.CharField(max_length=20, default='')
 
     ## There should be a validation that funtions and name are not combined the same way
     ## several times. Check Meta keyword unique_together later... Functions are n:m to roles
