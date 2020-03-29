@@ -5,6 +5,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from apps.accounts.models import User
+from apps.role.models import Role, Function
 
 # Create your models here.
 LESSTEN = 1
@@ -65,6 +66,8 @@ class IOffer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
+
+    offer_functions = models.ManyToManyField(Function)
 
     name_first = models.CharField(max_length=50, default='')
     name_last = models.CharField(max_length=50, default='')
