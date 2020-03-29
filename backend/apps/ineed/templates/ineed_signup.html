@@ -15,7 +15,7 @@ Registrierung - Studierende
 
 <div class="container">
     <div style="height:40px"></div>
-    {% if user.is_authenticated %}
+<!--     {% if user.is_authenticated %}
 
     {% blocktrans %} Sie sind bereits angemeldet. Hier geht es zum {% endblocktrans %} <a href="logout">Logout</a>.
     <hr>
@@ -28,12 +28,19 @@ Registrierung - Studierende
     <a href="/accounts/login_redirect">Login</a>.
     <hr>
     <br>
-    {% endif %}
+    {% endif %} -->
 
 
     <h1 class="font-weight-light match4hc-title"> {% blocktrans %}Sie brauchen in Ihrer Institution aktuell Hilfe?{% endblocktrans %} </h1>
     <h2 class="font-weight-light match4hc-title">{% blocktrans %}Wir verbinden Helfende und Hilfesuchende zu einem curaSWISS!{% endblocktrans %}</h2>
-    <p>{% blocktrans %}Bitte geben Sie hier die allgemeinen Angaben zu Ihrer Institution an. Nach Klick auf "Registrieren" erhalten Sie eine E-Mail mit einem Bestätigungslink. Nach Klick darauf gelangen Sie in die Datenbank. Dort können nach den von Ihnen gewünschten Kriterien (Ausbildungsstand etc.) Helfende suchen, filtern und diesen auf unserer Plattform direkt eine E-Mail verfassen. Der Emailversand erfolgt dann nach einer Validierung durch uns.{% endblocktrans %} </p>
+    <p>{% blocktrans %}Bitte geben Sie hier die allgemeinen Angaben zu Ihrer Institution ein. Nach Klick auf "Registrieren" erhalten Sie eine E-Mail mit einem Bestätigungslink. Nach Klick darauf gelangen Sie in die Datenbank. Dort können nach den von Ihnen gewünschten Kriterien (Ausbildungsstand etc.) Helfende suchen, filtern und diesen auf unserer Plattform direkt eine E-Mail verfassen. Der Emailversand erfolgt dann nach einer Validierung durch uns.{% endblocktrans %} </p>
+
+    <form method='POST'> {% csrf_token %}
+        {{ form|crispy }}
+    <input type='submit' value="Registrieren" />
+    </form>
+
+    <br>
 
 </div>
 {% endblock %}
