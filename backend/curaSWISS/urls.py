@@ -29,6 +29,7 @@ urlpatterns = [
     path('accounts/', include('apps.accounts.urls')),
     path('ioffer/', include('apps.ioffer.urls')),
     path('ineed/', include('apps.ineed.urls')),
+    path('map/', include('apps.map.urls')),
     path('admin/', admin.site.urls),
     path('', views.home),
     path('about/', views.about),
