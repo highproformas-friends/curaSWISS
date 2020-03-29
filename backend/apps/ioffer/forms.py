@@ -1,13 +1,13 @@
 from django import forms
 from .models import IOffer
 from django.core.exceptions import ValidationError
-
+from django_select2.forms import Select2Widget, ModelSelect2Widget
 
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout,Field, Row, Column, Div, HTML
 from apps.accounts.models import User
-
+from apps.location.models import CountryCode, ZipCode
 
 form_labels = {
     'uuid': _('Writer'),
@@ -73,8 +73,8 @@ class IOfferForm(forms.ModelForm):
 
             HTML("<hr style='margin-top: 30px; margin-bottom:30px;'><h2 class='form-heading'>{}</h2>".format(_("Über deinen Einsatz"))),
             Row(
-                Column('plz', css_class='form-group col-md-4 mb-0'),
                 Column('countrycode', css_class='form-group col-md-4 mb-0'),
+                Column('location', css_class='form-group col-md-4 mb-0'),
                 Column('umkreis', css_class='form-group col-md-4 mb-0'),
                 css_class='form-row'
             ),
@@ -117,3 +117,16 @@ class IOfferForm(forms.ModelForm):
 
 class IOfferFormAndMail(IOfferForm):
     email = forms.EmailField()
+    countrycode = forms.ModelChoiceField(queryset=CountryCode.objects.all().order_by('code_alpha_2'),
+                                         widget=Select2Widget)
+
+    location = forms.ModelChoiceField(
+        queryset=ZipCode.objects.all(),
+        label=u"Location",
+        widget=ModelSelect2Widget(
+            model=ZipCode,
+            search_fields=['plz__icontains', 'locality__icontains'],
+            dependent_fields={'countrycode': 'country_code'},
+            max_results=500,
+        )
+    )

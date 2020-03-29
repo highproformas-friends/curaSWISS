@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
@@ -29,6 +30,7 @@ urlpatterns = [
     path('accounts/', include('apps.accounts.urls')),
     path('ioffer/', include('apps.ioffer.urls')),
     path('ineed/', include('apps.ineed.urls')),
+    path('map/', include('apps.map.urls')),
     path('admin/', admin.site.urls),
     path('', views.home),
     path('about/', views.about),
@@ -59,6 +61,7 @@ urlpatterns = [
     path('ms-icon-144x144.png', RedirectView.as_view(url=staticfiles_storage.url('img/favicon/ms-icon-144x144.png'))),
     path('ms-icon-150x150.png', RedirectView.as_view(url=staticfiles_storage.url('img/favicon/ms-icon-150x150.png'))),
     path('ms-icon-310x310.png', RedirectView.as_view(url=staticfiles_storage.url('img/favicon/ms-icon-310x310.png'))),
-    path('ms-icon-70x70.png', RedirectView.as_view(url=staticfiles_storage.url('img/favicon/ms-icon-70x70.png')))
+    path('ms-icon-70x70.png', RedirectView.as_view(url=staticfiles_storage.url('img/favicon/ms-icon-70x70.png'))),
+    url(r'^select2/', include('django_select2.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += staticfiles_urlpatterns()

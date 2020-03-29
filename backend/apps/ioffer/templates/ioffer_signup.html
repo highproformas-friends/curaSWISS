@@ -7,11 +7,13 @@ Registrierung - Studierende
 {% endblock %}
 
 {% block header %}
+ {{ form.media.css }}
 {% endblock %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
+{{ form.media.js }}
 
 <div class="container">
     <div style="height:40px"></div>

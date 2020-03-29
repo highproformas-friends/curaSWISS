@@ -1,0 +1,72 @@
+[
+  {
+    "model": "role.function",
+    "pk": 1,
+    "fields": {
+      "name": "DOCTOR",
+      "short_text": "Ärzte/Ärztinnen"
+    }
+  },
+  {
+    "model": "role.function",
+    "pk": 2,
+    "fields": {
+      "name": "CARE_PERSON",
+      "short_text": "Pflegefachpersonen"
+    }
+  },
+  {
+    "model": "role.role",
+    "pk": 1,
+    "fields": {
+      "name": "MEDICINE_CARE",
+      "short_text": "Fachpersonal Medizin & Pflege",
+      "functions": [1, 2]
+    }
+  },
+  {
+    "model": "role.role",
+    "pk": 2,
+    "fields": {
+      "name": "CLEAN",
+      "short_text": "Fachpersonal Reinigung",
+      "functions": []
+    }
+  },
+  {
+    "model": "role.role",
+    "pk": 3,
+    "fields": {
+      "name": "LOGISTIC_TRANSPORT",
+      "short_text": "Fachpersonal Logistik & Transport",
+      "functions": []
+    }
+  },
+  {
+    "model": "role.role",
+    "pk": 4,
+    "fields": {
+      "name": "CATERING",
+      "short_text": "Fachpersonal Verpflegung",
+      "functions": []
+    }
+  },
+  {
+    "model": "role.role",
+    "pk": 5,
+    "fields": {
+      "name": "PERSONAL_ADMINISTRATION",
+      "short_text": "Fachpersonal Personal & Administration",
+      "functions": []
+    }
+  },
+  {
+    "model": "role.role",
+    "pk": 6,
+    "fields": {
+      "name": "OTHER",
+      "short_text": "Fachpersonal Sonstige",
+      "functions": []
+    }
+  }
+]
