@@ -12,7 +12,7 @@ class ZipCode(models.Model):
 
     country_code = models.ForeignKey(CountryCode, on_delete=models.CASCADE)
 
-    zip = models.CharField(max_length=10)
+    plz = models.CharField(max_length=10)
     lat = models.DecimalField(max_digits=11, decimal_places=8)
     lng = models.DecimalField(max_digits=11, decimal_places=8)
     locality = models.CharField(max_length=50, null=False)
