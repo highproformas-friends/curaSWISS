@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.ioffer',
     'apps.ineed',
-    'apps.role'
+    'apps.role',
+    'apps.skill'
 ]
 
 MIDDLEWARE = [
