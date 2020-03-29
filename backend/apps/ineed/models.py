@@ -4,6 +4,7 @@ from apps.accounts.models import User
 import uuid
 from datetime import datetime
 from apps.role.models import Role, Function
+from apps.location.models import ZipCode
 
 # Create your models here.
 
@@ -14,6 +15,8 @@ class INeed(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
 
     needed_functions = models.ManyToManyField(Function)
+
+    location = models.ForeignKey(ZipCode, on_delete=models.CASCADE, null=True)
 
     organization_name = models.CharField(max_length=50, default='')
     phone_number = models.CharField(max_length=100,default='')

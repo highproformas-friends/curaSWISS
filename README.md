@@ -13,6 +13,19 @@
 - Load test data:
 `docker exec backend python3 manage.py loaddata fixture.json`
 
+### Create Super User 
+- execute bash in docker container
+`docker exec -it backend /bin/bash`
+- create django super uesr
+`python3 manage.py createsuperuser`
+- connect to http://host:port/admin
+
+### Load Fixture Files
+Location app fixture
+
+
+`docker exec backend python3 manage.py loaddata location_fixture.json`
+
 ### Development
 File changes in python files trigger an auto-reload of the server.
 Migrations have to be executed with `docker exec backend python3 /curaswiss-backend/manage.py migrate`.
