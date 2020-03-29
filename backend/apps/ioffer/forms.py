@@ -4,16 +4,38 @@ from django.core.exceptions import ValidationError
 
 
 from django.utils.translation import gettext_lazy as _
-from django.utils.text import format_lazy
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout,Field, Row, Column, Div, HTML
 from apps.accounts.models import User
+
+
+form_labels = {
+    'uuid': _('Writer'),
+    'registration_date': _('Writer'),
+
+    'name_first': _('Vorname'),
+    'name_last': _('Nachname'),
+    'phone_number': _('Telefonnummer'),
+
+    'plz': _('Postleitzahl'),
+    'countrycode': _('Land'),
+    'email': _('Email'),
+    'availability_start': _('Ich bin verfügbar ab'),
+
+    'braucht_bezahlung': _('Ich benötige eine Vergütung'),
+    'sonstige_qualifikationen': _('Weitere Qualifikationen'),
+    'datenschutz_zugestimmt': _('Hiermit akzeptiere ich die <a href="/dataprotection/">Datenschutzbedingungen</a>.'),
+    'einwilligung_datenweitergabe': _(
+        'Ich bestätige, dass meine Angaben korrekt sind und ich der Institution meinen Ausbildungsstand nachweisen kann. Mit der Weitergabe meiner Kontaktdaten an die Institutionen bin ich einverstanden.'),
+'zeitliche_verfuegbarkeit': _('Zeitliche Verfügbarkeit, bis zu')
+}
+
 
 class IOfferForm(forms.ModelForm):
     class Meta:
         model = IOffer
         exclude = ['uuid', 'registration_date', 'user']
-        #labels = form_labels
+        labels = form_labels
         help_texts = {
             'email': _('Über diese Emailadresse dürfen dich medizinische Einrichtungen kontaktieren'),
             'countrycode': _('Bitte wähle ein Land aus'),
@@ -31,6 +53,12 @@ class IOfferForm(forms.ModelForm):
         self.helper.form_action = 'submit_survey'
 
         self.helper.layout = Layout(
+  HTML("<h2 class='form-heading'>{}</h2>".format(_("Wo willst du helfen?"))),
+            Row(
+                Column('role', css_class='form-group col-md-6 mb-0'),
+                Column('offer_functions', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
   HTML("<h2 class='form-heading'>{}</h2>".format(_("Persönliche Informationen"))),
             Row(
                 Column('name_first', css_class='form-group col-md-6 mb-0'),
@@ -85,3 +113,7 @@ class IOfferForm(forms.ModelForm):
         if User.objects.filter(email=email).exists():
             raise ValidationError(_("Diese Email ist bereits vergeben"))
         return email
+
+
+class IOfferFormAndMail(IOfferForm):
+    email = forms.EmailField()
