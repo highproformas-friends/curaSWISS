@@ -57,7 +57,6 @@ share/python-wheels/
 MANIFEST
 .idea
 venv
-backend/apps/**/migrations/0*.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
