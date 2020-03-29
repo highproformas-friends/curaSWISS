@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load dict_key %}
 {% load i18n %}
 {% load l10n %}
 
@@ -7,17 +8,6 @@
 {% blocktrans %}Karte der Hilfsbereiten{% endblocktrans %}
 {% endblock %}
 
-<!--<div id='map' width="100%" style='height:800px'></div>
-<script>
-mapboxgl.accessToken = '{{ mapbox_access_token }}';
-var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: [8.22267,46.80066],
-    zoom: 7
-});
-</script>
--->
 {% block header %}
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
@@ -30,60 +20,135 @@ var map = new mapboxgl.Map({
     <style type="text/css">
         #mapid {
             height: 1000px;
-            z-index:1;
+        }
+        #filterbar {
+            width: 100%;
         }
     </style>
 {% endblock %}
 
 {% block content %}
+    <div id="filterbar">
+        <form id="filter">
+            <fieldset>
+                {% for fun in functions %}
+                    <input type="checkbox" class="filtercheckboxes" name="filter_{{ fun }}" value="{{ fun }}" onclick="return refilter_functions();" checked>{{ fun }}
+                {% endfor %}
+            </fieldset>
+        </form>
+    </div>
     <div id="mapid"></div>
     <script type="text/javascript">
-        /*
-        var mymap = L.map('mapid').setView([46.80066, 8.22267], 8);
 
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/streets-v11',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: '{{ mapbox_access_token }}'
-        }).addTo(mymap);
-        */
-        var littleton = L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.'),
-            denver    = L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.'),
-            aurora    = L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.'),
-            golden    = L.circle([39.77, -105.23],{
-                           color: 'blue',
-                           weight: 2 + 0.5 * 1,
-                           fillColor: 'red',
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function refilter_functions() {
+            console.log('filter changed')
+            update_markers(markers)
+        }
+
+        function get_ticked_checkboxes() {
+            var checked = [];
+            $.each($("input[class='filtercheckboxes']:checked"), function(){
+                checked.push($(this).val());
+            });
+            return checked
+        }
+
+        function update_markers(markers){
+            popup_messages = {}
+            $.each(markers, function(plz, marker){
+                popup_messages[plz] = 'At '+plz+' there are the following helpers registered meeting your search criteria:<br />'
+            });
+            var checked = get_ticked_checkboxes();
+            var offerings = {};
+
+            {% for plz in offers %}
+                var offer = JSON.parse('{{ offers|dict_key:plz }}'.replace(/&#x27;/g, '"'));
+                $.each(offer, function( offering, counts ) {
+                    if(checked.includes(offering)) {
+                        if(offering in offerings) { // check if key is in
+                            offerings[offering]['{{plz}}'] = offerings[offering]['{{plz}}'] + counts || counts;
+                        }else{
+                            offerings[offering] = {"{{plz}}": counts}
+                        }
+                    }
+                });
+            {% endfor %}
+            // now fill marker popups
+            updated = []
+            console.log(offerings)
+            $.each(offerings, function(offering, places){
+                $.each(places, function(plz, count){
+                    updated.push(plz);
+                    popup_messages[plz] += count+' ' +offering+ '<br />';
+                });
+            });
+            // apply to markers or remove if marker is no longer needed
+            $.each(markers, function(plz, marker){
+                if(updated.includes(plz)){
+                    marker.bindPopup(popup_messages[plz]).addTo(map);
+                }else{
+                    marker.remove(map);
+                }
+            });
+        }
+
+        var markers = {};
+        {% for plz in coordinates %}
+            var coords = JSON.parse('{{ coordinates|dict_key:plz }}'.replace(/&#x27;/g, '"'));
+
+            var col = getRandomColor();
+            markers['{{ plz }}'] = L.circle([coords.lat, coords.lng],{
+                           color: col,
+                           weight: 3,
+                           fillColor: col,
                            fillOpacity: .2,
-                           radius: 500 + 100 * 1
-                       }).bindPopup('This is Golden, CO.');
-        var cities = L.layerGroup([littleton, denver]);
-        var cities2 = L.layerGroup([aurora, golden]);
+                           radius: 1000
+                       });
+        {% endfor %}
 
+
+/*
+            golden    = .bindPopup('This is Golden, CO.');
+        //var cities = L.layerGroup([littleton, denver]);
+        //var cities2 = L.layerGroup([aurora, golden]);
+*/
+        // setup the map
         var mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={{ mapbox_access_token }}';
         var mapboxAttribution = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
         var streets   = L.tileLayer(mapboxUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mapboxAttribution});
 
         var map = L.map('mapid', {
-            center: [39.73, -104.99],
-            zoom: 10,
-            layers: [streets, cities, cities2] // default layers
+            center: [46.80066, 8.22267],
+            zoom: 9,
+            layers: [streets] // default layers
         });
 
-        var overlayMaps = {
-            "FaBe": cities,
-            "FaGe": cities2
-        };
+        update_markers(markers);
 
+
+        // generate the filter
+        var overlayMaps = {}
+        {% for fun in functions %}
+            overlayMaps['{{ fun }}'] = null;
+        {% endfor %}
+
+        // plot the map
         L.control.layers(
             null, // map type shall not be switchable
             overlayMaps,
             {collapsed:false}
         ).addTo(map);
 
+        // make sure map occupies whole page
         window.addEventListener('load', function() {
             $(window).on("resize", function () {
                 var height = $(window).height();
@@ -94,8 +159,6 @@ var map = new mapboxgl.Map({
                 $("#mapid").height(newHeight);
                 map.invalidateSize();
             }).trigger("resize");});
-        {% for fun in functions %}
-            console.log('{{ fun }}')
-        {% endfor %}
+
     </script>
 {% endblock %}
