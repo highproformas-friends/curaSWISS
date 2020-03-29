@@ -64,7 +64,7 @@
         function update_markers(markers){
             popup_messages = {}
             $.each(markers, function(plz, marker){
-                popup_messages[plz] = 'At '+plz+' there are the following helpers registered meeting your search criteria:<br />'
+                popup_messages[plz] = 'In "'+marker.options["title"]+'" are the following helpers registered meeting your search criteria:<br />'
             });
             var checked = get_ticked_checkboxes();
             var offerings = {};
@@ -133,9 +133,9 @@
             $(window).on("resize", function () {
                 var height = $(window).height();
                 var navHeight = $('.navbar').outerHeight();
-
+                var checkboxes = $('#filterbar').outerHeight
                 var footerHeight = $('.footer').innerHeight();
-                var newHeight = height - navHeight - footerHeight;
+                var newHeight = height - navHeight - checkboxes - footerHeight;
                 $("#mapid").height(newHeight);
                 map.invalidateSize();
             }).trigger("resize");});
