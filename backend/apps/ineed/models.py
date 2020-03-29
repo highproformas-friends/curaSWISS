@@ -3,17 +3,17 @@ from django.db import models
 from apps.accounts.models import User
 import uuid
 from datetime import datetime
+from apps.role.models import Role, Function
 
 # Create your models here.
-class Role(models.Model):
-
-    name = models.CharField(max_length=50)
 
 
 class INeed(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
+
+    needed_functions = models.ManyToManyField(Function)
 
     organization_name = models.CharField(max_length=50, default='')
     phone_number = models.CharField(max_length=100,default='')
