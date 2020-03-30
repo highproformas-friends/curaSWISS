@@ -1,0 +1,12 @@
+<h2 class='form-heading'>Als was arbeitest du?<span class="asteriskField">*</span></h2>
+<div class="form-group col-md-12 mb-0">
+    {% for function in functions %}
+        <div class="form-group form-check form-check-inline">
+            <div class="custom-control custom-checkbox">
+                <input class="form-check-input checkboxinput custom-control-input" type="checkbox" name="offer_functions" value="{{ function.id }}" id="offer_functions_option{{ function.id  }}">
+                <label class="custom-control-label" for="offer_functions_option{{ function.id  }}">{{ function.short_text }}</label>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
