@@ -7,10 +7,19 @@ from apps.accounts.models import User
 from apps.accounts.utils import send_password_set_email
 from apps.ioffer.forms import IOfferForm, IOfferFormAndMail
 from apps.ioffer.models import IOffer
+from apps.role.models import Function, Role
 
 
 def thanks(request):
     return render(request, 'ioffer_thanks.html', {})
+
+
+def load_functions(request):
+    role_id = request.GET.get('role')
+    role = Role.objects.filter(id=role_id).first()
+    functions = role.functions.all()
+
+    return render(request, 'ioffer_functions_partial.html', {'functions': functions})
 
 
 def sign_up(request):

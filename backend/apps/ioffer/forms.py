@@ -27,7 +27,9 @@ form_labels = {
     'datenschutz_zugestimmt': _('Hiermit akzeptiere ich die <a href="/dataprotection/">Datenschutzbedingungen</a>.'),
     'einwilligung_datenweitergabe': _(
         'Ich bestätige, dass meine Angaben korrekt sind und ich der Institution meinen Ausbildungsstand nachweisen kann. Mit der Weitergabe meiner Kontaktdaten an die Institutionen bin ich einverstanden.'),
-'zeitliche_verfuegbarkeit': _('Zeitliche Verfügbarkeit, bis zu')
+'zeitliche_verfuegbarkeit': _('Zeitliche Verfügbarkeit, bis zu'),
+    'role': _('Rolle'),
+    'location': _('Ortschaft'),
 }
 
 
@@ -56,10 +58,14 @@ class IOfferForm(forms.ModelForm):
   HTML("<h2 class='form-heading'>{}</h2>".format(_("Wo willst du helfen?"))),
             Row(
                 Column('role', css_class='form-group col-md-6 mb-0'),
-                Column('offer_functions', css_class='form-group col-md-6 mb-0'),
+                # Column('offer_functions', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
-  HTML("<h2 class='form-heading'>{}</h2>".format(_("Persönliche Informationen"))),
+            Row(
+                HTML("<div id='ajax_functions_placeholder' class='form-group col-md-6 mb-0'></div>"),
+                css_class='form-row'
+            ),
+  HTML("<hr style='margin-top: 30px; margin-bottom:30px;'><h2 class='form-heading'>{}</h2>".format(_("Persönliche Informationen"))),
             Row(
                 Column('name_first', css_class='form-group col-md-6 mb-0'),
                 Column('name_last', css_class='form-group col-md-6 mb-0'),
@@ -118,11 +124,11 @@ class IOfferForm(forms.ModelForm):
 class IOfferFormAndMail(IOfferForm):
     email = forms.EmailField()
     countrycode = forms.ModelChoiceField(queryset=CountryCode.objects.all().order_by('code_alpha_2'),
-                                         widget=Select2Widget)
+                                         widget=Select2Widget, label=_("Land"))
 
     location = forms.ModelChoiceField(
         queryset=ZipCode.objects.all(),
-        label=u"Location",
+        label=_("Ortschaft"),
         widget=ModelSelect2Widget(
             model=ZipCode,
             search_fields=['plz__icontains', 'locality__icontains'],

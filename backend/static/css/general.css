@@ -282,3 +282,24 @@ input[type="color"]:focus,
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 20, 146, 0.4);
   outline: 0 none;
 }
+
+#ajax_functions_placeholder{
+  margin-top: 25px;
+}
+
+.alphatest-banner{
+  background-color: #02e463;
+  color: red;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15pt;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1040;
+}
+
+.p-30{
+  padding-top: 30px;
+}

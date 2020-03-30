@@ -1364,6 +1364,12 @@ msgstr "Supported by"
 msgid "Rechtliche Fragen für Helfende bei der Corona-Pandemie"
 msgstr "Legal questions for helpers during the Corona pandemic"
 
+msgid "Rolle"
+msgstr "Role"
+
+msgid "Ortschaft"
+msgstr "Location"
+
 #~ msgid "Innere Medizin"
 #~ msgstr "Internal medicine"
 
