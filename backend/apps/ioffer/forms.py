@@ -62,7 +62,7 @@ class IOfferForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                HTML("<div id='ajax_functions_placeholder' class='form-group col-md-6 mb-0'></div>"),
+                HTML("<div id='ajax_functions_placeholder' class='form-group col-md-12 mb-0'></div>"),
                 css_class='form-row'
             ),
   HTML("<hr style='margin-top: 30px; margin-bottom:30px;'><h2 class='form-heading'>{}</h2>".format(_("Persönliche Informationen"))),
