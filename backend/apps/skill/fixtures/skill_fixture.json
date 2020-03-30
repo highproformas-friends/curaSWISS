@@ -4,7 +4,6 @@
     "pk": 1,
     "fields": {
       "short_text": "PhD Nursing Science",
-      "bla": false,
       "certificate_needed": true,
       "valid_function": [1]
     }
@@ -14,7 +13,6 @@
     "pk": 2,
     "fields": {
       "short_text": "Master of Science in Nursing (MSN)",
-      "bla": true,
       "certificate_needed": true,
       "valid_function": [1]
     }
@@ -24,7 +22,6 @@
     "pk": 3,
     "fields": {
       "short_text": "Fachfrau/ -mann Gesundheit EFZ (FaGe)",
-      "bla": false,
       "certificate_needed": true,
       "valid_function": [2]
     }
